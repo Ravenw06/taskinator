@@ -10,15 +10,25 @@ var tasksToDoEl = document.querySelector("#tasks-to-do")
 
 var createTaskHandler = function(event) {
     event.preventDefault();
+    var taskNameInput = document.querySelector("input[name='task-name']").value;
+    // taskNameInput is selecting and storing the input of the #task-name and grabbing only the (.value) value-property from all underlying data
+    var taskTypeInput = document.querySelector("select[name='task-type']").value;
 
     var listItemEl = document.createElement("li");
     // whenever this listItemEl/ entire function is trigger, it creates another <li>
     listItemEl.className = "task-item";
-    // gives all the listItemEL the class name to apply css on them
-    listItemEl.textContent = "This is a new task.";
-    // put text.content in the empty <li>
+    var taskInfoEl = document.createElement("div");
+    taskInfoEl.className = "task-into";
+    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>";
+    listItemEl.appendChild(taskInfoEl);
     tasksToDoEl.appendChild(listItemEl);
-    //attached the listItemEl into the tasksToDo location where we selected with doc.query.selector
+
+    // listItemEl.className = "task-item";
+    // // gives all the listItemEL the class name to apply css on them
+    // listItemEl.textContent = taskNameInput;
+    // // put text.content in the empty <li>
+    // tasksToDoEl.appendChild(listItemEl);
+    // //attached the listItemEl into the tasksToDo location where we selected with doc.query.selector
 };
 // (deleted)buttonEl.addEventListener("click", createTaskHandler);
 // when the save task button is clicked, the addEventListener responses by triggering the createTaskHandler function
