@@ -8,21 +8,18 @@ var tasksToDoEl = document.querySelector("#tasks-to-do")
 
 // XXXX.addEventListener("click", function() {...}) <=Actually putting in the function that you want to button to do 
 
-var createTaskHandler = function(event) {
+var taskFormHandler = function(event) {
     event.preventDefault();
     var taskNameInput = document.querySelector("input[name='task-name']").value;
     // taskNameInput is selecting and storing the input of the #task-name and grabbing only the (.value) value-property from all underlying data
     var taskTypeInput = document.querySelector("select[name='task-type']").value;
 
-    var listItemEl = document.createElement("li");
-    // whenever this listItemEl/ entire function is trigger, it creates another <li>
-    listItemEl.className = "task-item";
-    var taskInfoEl = document.createElement("div");
-    taskInfoEl.className = "task-into";
-    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>";
-    listItemEl.appendChild(taskInfoEl);
-    tasksToDoEl.appendChild(listItemEl);
-
+    //package up data as an object
+    var taskDataObj = {
+        name: taskNameInput,
+        type: taskTypeInput
+    };
+    createTaskEl(taskDataObj);
     // listItemEl.className = "task-item";
     // // gives all the listItemEL the class name to apply css on them
     // listItemEl.textContent = taskNameInput;
@@ -32,6 +29,16 @@ var createTaskHandler = function(event) {
 };
 // (deleted)buttonEl.addEventListener("click", createTaskHandler);
 // when the save task button is clicked, the addEventListener responses by triggering the createTaskHandler function
+var createTaskEl = function(taskDataObj) {
 
-formEl.addEventListener("submit", createTaskHandler);
+    var listItemEl = document.createElement("li");
+    // whenever this listItemEl/ entire function is trigger, it creates another <li>
+    listItemEl.className = "task-item";
+    var taskInfoEl = document.createElement("div");
+    taskInfoEl.className = "task-into";
+    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
+    listItemEl.appendChild(taskInfoEl);
+    tasksToDoEl.appendChild(listItemEl);
+}
+formEl.addEventListener("submit", taskFormHandler);
 // >>Now the script.js file finds the <form> element in the page and saves it to the variable formEl, so that we can interact with the form and access some of its child HTML elements.
