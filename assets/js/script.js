@@ -1,3 +1,8 @@
+// Stopped at Pause 4.3.6 
+
+
+var taskIdCounter = 0;
+
 // Pick the pretty button that you wanna do something to; put it in a  var or const
 // (deleted)var buttonEl = document.querySelector("#save-task");
 // buttonEl represents the specific btn with the id*save-task
@@ -25,13 +30,49 @@ var taskFormHandler = function(event) {
         type: taskTypeInput
     };
     createTaskEl(taskDataObj);
+};
+var createTaskActions = function(taskId) {
+    var actionContainerEl = document.createElement("div");
+    actionContainerEl.className = "task-actions";
+    var editButtonEl = document.createElement("button");
+    editButtonEl.textContent = "Edit";
+    editButtonEl.className = "btn edit-btn";
+    editButtonEl.setAttribute("data-task-id", taskId);
+    
+    actionContainerEl.appendChild(editButtonEl);
+    
+    // create delete button
+    var deleteButtonEl = document.createElement("button");
+    deleteButtonEl.textContent = "Delete";
+    deleteButtonEl.className = "btn delete-btn";
+    deleteButtonEl.setAttribute("data-task-id", taskId);
+    
+    actionContainerEl.appendChild(deleteButtonEl);
+    var statusSelectEl = document.createElement("select");
+    var statusChoices = ["To Do", "In Progress", "Completed"];
+    for (var i = 0; i <statusChoices.length; i++) {
+        // create option element
+        var statusOptionEl = document.createElement('option');
+        statusOptionEl.textContent = statusChoices[i];
+        statusOptionEl.setAttribute('value', statusChoices[i]);
+        //append to select
+        statusSelectEl.appendChild(statusOptionEl)
+    }
+    statusSelectEl.className = "select-status";
+    statusSelectEl.setAttribute("name", "status-change");
+    statusSelectEl.setAttribute("data-task-id", taskId);
+    actionContainerEl.appendChild(statusSelectEl);
+    return actionContainerEl;
+
+
+};
     // listItemEl.className = "task-item";
     // // gives all the listItemEL the class name to apply css on them
     // listItemEl.textContent = taskNameInput;
     // // put text.content in the empty <li>
     // tasksToDoEl.appendChild(listItemEl);
     // //attached the listItemEl into the tasksToDo location where we selected with doc.query.selector
-};
+
 // (deleted)buttonEl.addEventListener("click", createTaskHandler);
 // when the save task button is clicked, the addEventListener responses by triggering the createTaskHandler function
 var createTaskEl = function(taskDataObj) {
@@ -39,11 +80,16 @@ var createTaskEl = function(taskDataObj) {
     var listItemEl = document.createElement("li");
     // whenever this listItemEl/ entire function is trigger, it creates another <li>
     listItemEl.className = "task-item";
+    listItemEl.setAttribute("data-task-id", taskIdCounter);
     var taskInfoEl = document.createElement("div");
     taskInfoEl.className = "task-into";
     taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
     listItemEl.appendChild(taskInfoEl);
+    var taskActionsEl = createTaskActions(taskIdCounter);
+    listItemEl.appendChild(taskActionsEl);
     tasksToDoEl.appendChild(listItemEl);
+
+    taskIdCounter++;
 }
 formEl.addEventListener("submit", taskFormHandler);
 // >>Now the script.js file finds the <form> element in the page and saves it to the variable formEl, so that we can interact with the form and access some of its child HTML elements.
