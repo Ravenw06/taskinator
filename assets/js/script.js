@@ -1,7 +1,15 @@
-// Stopped at n 4.3.7
-
 var pageContentEl = document.querySelector("#page-content");
 // initial a selection area of the page-content for targeting delete button
+var editTask = function(taskId){
+    console.log("editing task #" + taskId);
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    var taskName= taskSelected.querySelector("h3.task-name").textContent;
+    var taskType = taskSelected.querySelector("span.task-type").textContent;
+    document.querySelector("input[name='task-name']").value = taskName;
+    document.querySelector("select[name='task-type']").value = taskType;
+    document.querySelector("#save-task").textContent = "Save Task";
+};
+
 var deleteTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
@@ -101,10 +109,15 @@ formEl.addEventListener("submit", taskFormHandler);
 // >>Now the script.js file finds the <form> element in the page and saves it to the variable formEl, so that we can interact with the form and access some of its child HTML elements.
 var taskButtonHandler = function(event) {
     // function(event) =  when the user or the browser manipulates a page(anything)
-    console.log(event.target);
-    if (event.target.matches(".delete-btn")) {
+    var targetEl = event.target;
+    if (targetEl.matches(".edit-btn")) {
+        var taskId = targetEl.getAttribute("data-task-id");
+        editTask(taskId);
+        console.log(taskId)
+    }
+    else if (targetEl.matches(".delete-btn")) {
         // alright if the user click the delete-btn class specifically, how would you like to react/ show 
-        var taskId = event.target.getAttribute("data-task-id");
+        var taskId = targetEl.getAttribute("data-task-id");
         deleteTask(taskId);
     }
 };
