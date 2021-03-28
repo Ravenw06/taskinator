@@ -8,12 +8,25 @@ var editTask = function(taskId){
     document.querySelector("input[name='task-name']").value = taskName;
     document.querySelector("select[name='task-type']").value = taskType;
     document.querySelector("#save-task").textContent = "Save Task";
+    formEl.setAttribute("data-task-id", taskId);
 };
 
 var deleteTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
 }
+
+var completeEditTask = function(taskName, taskType, taskId) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    // set new values
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert("Task Updated!");
+    formEl.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Task";
+};
 var taskIdCounter = 0;
 
 // Pick the pretty button that you wanna do something to; put it in a  var or const
@@ -25,7 +38,6 @@ var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do")
 
 // XXXX.addEventListener("click", function() {...}) <=Actually putting in the function that you want to button to do 
-
 var taskFormHandler = function(event) {
     event.preventDefault();
     var taskNameInput = document.querySelector("input[name='task-name']").value;
@@ -38,12 +50,23 @@ var taskFormHandler = function(event) {
         return false;
     }
     formEl.reset();
+
+    var isEdit = formEl.hasAttribute("data-task-id");
+    console.log(isEdit);
+    if (isEdit) {
+        var taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    } 
+      // no data attribute, so create object as normal and pass to createTaskEl function
+    else {
     var taskDataObj = {
         name: taskNameInput,
         type: taskTypeInput
     };
     createTaskEl(taskDataObj);
-};
+    }
+
+}
 var createTaskActions = function(taskId) {
     var actionContainerEl = document.createElement("div");
     actionContainerEl.className = "task-actions";
@@ -78,8 +101,7 @@ var createTaskActions = function(taskId) {
     actionContainerEl.appendChild(statusSelectEl);
     return actionContainerEl;
 
-
-};
+}
     // listItemEl.className = "task-item";
     // // gives all the listItemEL the class name to apply css on them
     // listItemEl.textContent = taskNameInput;
@@ -113,7 +135,6 @@ var taskButtonHandler = function(event) {
     if (targetEl.matches(".edit-btn")) {
         var taskId = targetEl.getAttribute("data-task-id");
         editTask(taskId);
-        console.log(taskId)
     }
     else if (targetEl.matches(".delete-btn")) {
         // alright if the user click the delete-btn class specifically, how would you like to react/ show 
@@ -121,4 +142,5 @@ var taskButtonHandler = function(event) {
         deleteTask(taskId);
     }
 };
+
 pageContentEl.addEventListener("click", taskButtonHandler);
